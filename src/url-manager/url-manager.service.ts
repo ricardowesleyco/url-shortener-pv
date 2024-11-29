@@ -74,7 +74,7 @@ export class UrlManagerService {
       throw new NotFoundException()
     }
     try {
-      await this.shortUrlRepository.update(urlEntity.id,{origin:updateUrlManagerDto.url})
+      await this.shortUrlRepository.update(urlEntity.id,{origin:updateUrlManagerDto.newUrl})
     } catch (error) {
       console.log({error})
       // REVIEW Message

@@ -5,5 +5,5 @@ export class UpdateUrlManagerDto  {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    url: string
+    newUrl: string
 }
