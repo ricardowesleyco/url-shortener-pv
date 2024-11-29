@@ -16,7 +16,7 @@ export class UrlManagerService {
 
   ){}
 
-  async create(data: CreateShortUrlDto,user?: UserEntity) {
+  async create(data: CreateShortUrlDto,user?: UserEntity): Promise<{shortUrl:string}> {
     const BaseApiURL:string = process.env.BASE_API_URL ?? 'localhost'
     const BaseApiPort:string = process.env.PORT ?? '3000'
     const BaseApiPrefix:string = process.env.BASE_API_PREFIX ?? 'api/v1'
@@ -36,7 +36,7 @@ export class UrlManagerService {
 
       const entityResult = await this.shortUrlRepository.save(schema)
 
-      return `${APIURL}/${entityResult.short}`
+      return {shortUrl:`${APIURL}/${entityResult.short}`}
       
     } catch (error) {
       console.log({error})
@@ -49,14 +49,14 @@ export class UrlManagerService {
 
   }
 
-  async findAll(userId:number) {
+  async findAll(userId:number) :Promise<ShortUrlEntity[]>{
     return await this.shortUrlRepository.find({
       select:['origin','short','count','createdAt','updatedAt'],
       where:{userId:userId,isActive:true}
     })
   }
 
-  async findOne(url: string) {
+  async findOne(url: string): Promise<{originUrl:string}> {
     const urlEntity =  await this.shortUrlRepository.findOneBy({short:url,isActive:true})
     if (!urlEntity) {
       throw new NotFoundException()
@@ -64,7 +64,7 @@ export class UrlManagerService {
     
     await this.incrementCounter(urlEntity)
     
-    return urlEntity.origin
+    return {originUrl:urlEntity.origin}
   }
 
   async update(url: string, updateUrlManagerDto: UpdateUrlManagerDto) {

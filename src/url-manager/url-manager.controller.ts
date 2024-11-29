@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
 import { UrlManagerService } from './url-manager.service';
 import { CreateShortUrlDto } from './dto/create-short-url.dto';
 import { UpdateUrlManagerDto } from './dto/update-short-url.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { Response } from 'express';
 
 @Controller('')
 export class UrlManagerController {
@@ -28,8 +29,10 @@ export class UrlManagerController {
   @Public()
   @Get(':url')
   async findOne(
-    @Param('url') url: string) {
-      return await this.urlManagerService.findOne(url);
+    @Param('url') url: string,
+    @Res() response: Response) {
+      const shortUrl = await this.urlManagerService.findOne(url);
+      response.redirect(301, shortUrl.originUrl)
   }
 
   @Patch(':url')
