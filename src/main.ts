@@ -8,16 +8,17 @@ async function bootstrap() {
   app.setGlobalPrefix(process.env.BASE_API_PREFIX ?? 'api/v1');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-
   const config = new DocumentBuilder()
     .setTitle('URL Shortener')
     .setDescription('A Simple URL Shortener')
     .setVersion('1.0')
-    // .addTag('cats')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+    })
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-
 
   await app.listen(process.env.PORT ?? 3000);
 }

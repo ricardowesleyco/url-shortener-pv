@@ -15,6 +15,7 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Response } from 'express';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
 @Controller('')
 export class UrlManagerController {
@@ -22,6 +23,12 @@ export class UrlManagerController {
 
   @Public()
   @Post()
+  @ApiResponse({
+    status: 201,
+    description: 'Success.',
+    example: { shortUrl: 'string' },
+  })
+  @ApiResponse({ status: 409, description: 'Try again later.' })
   async create(
     @GetUser() user,
     @Body() createUrlManagerDto: CreateShortUrlDto,
@@ -30,12 +37,35 @@ export class UrlManagerController {
   }
 
   @Get('all')
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    example: [
+      {
+        origin: 'string',
+        short: 'string',
+        count: 'integer',
+        createdAt: 'Date',
+        updatedAt: 'Date',
+      },
+      {
+        origin: 'string',
+        short: 'string',
+        count: 'integer',
+        createdAt: 'Date',
+        updatedAt: 'Date',
+      },
+    ],
+  })
+  @ApiResponse({ status: 404, description: 'Not found.' })
   findAll(@GetUser() user) {
     return this.urlManagerService.findAll(user.id);
   }
 
   @Public()
   @Get(':url')
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 404, description: 'Not found.' })
   async findOne(@Param('url') url: string, @Res() response: Response) {
     const shortUrl = await this.urlManagerService.findOne(url);
     response.redirect(303, shortUrl.originUrl);
@@ -43,6 +73,9 @@ export class UrlManagerController {
   }
 
   @Patch(':url')
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, example: { message: `Origin Url updated` } })
+  @ApiResponse({ status: 404, description: 'Not found.' })
   async update(
     @GetUser() user,
     @Param('url') url: string,
@@ -52,6 +85,9 @@ export class UrlManagerController {
   }
 
   @Delete(':url')
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, example: { message: `Url removed` } })
+  @ApiResponse({ status: 404, description: 'Not found.' })
   remove(@GetUser() user, @Param('url') url: string) {
     return this.urlManagerService.remove(url);
   }

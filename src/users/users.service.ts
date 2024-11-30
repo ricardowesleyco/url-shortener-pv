@@ -34,11 +34,8 @@ export class UsersService {
 
       return { message: 'User created.' };
     } catch (error) {
-      console.log({ error });
-      // REVIEW Message
       const errorMessage = error.message || 'Internal Error';
       throw new ConflictException(errorMessage);
-      // REVIEW LOGGER
     }
   }
 

@@ -22,12 +22,12 @@ export class UrlManagerService {
     data: CreateShortUrlDto,
     user?: UserEntity,
   ): Promise<{ shortUrl: string }> {
-    const BaseApiURL: string = process.env.BASE_API_URL ?? 'localhost';
-    const BaseApiPort: string = process.env.PORT ?? '3000';
+    const BaseApiURL: string = process.env.BASE_API_URL ?? 'localhost:3000';
+    // const BaseApiPort: string = process.env.PORT ?? '3000';
     const BaseApiPrefix: string = process.env.BASE_API_PREFIX ?? 'api/v1';
 
     //Utils
-    const APIURL: string = `${BaseApiURL}:${BaseApiPort}/${BaseApiPrefix}`;
+    const APIURL: string = `${BaseApiURL}/${BaseApiPrefix}`;
 
     const shortUrl: string = nanoid(6);
 
@@ -43,11 +43,8 @@ export class UrlManagerService {
 
       return { shortUrl: `${APIURL}/${entityResult.short}` };
     } catch (error) {
-      console.log({ error });
-      // REVIEW Message
       const errorMessage = error.message || 'Try again later.';
       throw new ConflictException(errorMessage);
-      // REVIEW LOGGER
     }
   }
 
@@ -90,11 +87,8 @@ export class UrlManagerService {
         origin: updateUrlManagerDto.newUrl,
       });
     } catch (error) {
-      console.log({ error });
-      // REVIEW Message
       const errorMessage = error.message || 'Try again later.';
       throw new ConflictException(errorMessage);
-      // REVIEW LOGGER
     }
     return { message: `Origin Url updated` };
   }
@@ -115,11 +109,8 @@ export class UrlManagerService {
         deletedAt: now,
       });
     } catch (error) {
-      console.log({ error });
-      // REVIEW Message
       const errorMessage = error.message || 'Internal Error';
       throw new ConflictException(errorMessage);
-      // REVIEW LOGGER
     }
     return { message: `Url removed` };
   }
