@@ -64,7 +64,7 @@ export class UrlManagerController {
 
   @Public()
   @Get(':url')
-  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 303 })
   @ApiResponse({ status: 404, description: 'Not found.' })
   async findOne(@Param('url') url: string, @Res() response: Response) {
     const shortUrl = await this.urlManagerService.findOne(url);
