@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+} from '@nestjs/common';
 import { UrlManagerService } from './url-manager.service';
 import { CreateShortUrlDto } from './dto/create-short-url.dto';
 import { UpdateUrlManagerDto } from './dto/update-short-url.dto';
@@ -15,38 +24,35 @@ export class UrlManagerController {
   @Post()
   async create(
     @GetUser() user,
-    @Body() createUrlManagerDto: CreateShortUrlDto) {
-    return await this.urlManagerService.create(createUrlManagerDto,user);
+    @Body() createUrlManagerDto: CreateShortUrlDto,
+  ) {
+    return await this.urlManagerService.create(createUrlManagerDto, user);
   }
 
   @Get('all')
-  findAll(
-    @GetUser() user,
-  ) {
+  findAll(@GetUser() user) {
     return this.urlManagerService.findAll(user.id);
   }
 
   @Public()
   @Get(':url')
-  async findOne(
-    @Param('url') url: string,
-    @Res() response: Response) {
-      const shortUrl = await this.urlManagerService.findOne(url);
-      response.redirect(301, shortUrl.originUrl)
+  async findOne(@Param('url') url: string, @Res() response: Response) {
+    const shortUrl = await this.urlManagerService.findOne(url);
+    response.redirect(303, shortUrl.originUrl);
+    // return { origin: shortUrl.originUrl };
   }
 
   @Patch(':url')
   async update(
     @GetUser() user,
-    @Param('url') url: string, 
-    @Body() updateUrlManagerDto: UpdateUrlManagerDto) {
-      return await this.urlManagerService.update(url, updateUrlManagerDto);
+    @Param('url') url: string,
+    @Body() updateUrlManagerDto: UpdateUrlManagerDto,
+  ) {
+    return await this.urlManagerService.update(url, updateUrlManagerDto);
   }
 
   @Delete(':url')
-  remove(
-    @GetUser() user,
-    @Param('url') url: string) {
+  remove(@GetUser() user, @Param('url') url: string) {
     return this.urlManagerService.remove(url);
   }
 }

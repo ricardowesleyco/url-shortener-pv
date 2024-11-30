@@ -19,10 +19,12 @@ import 'dotenv/config';
       database: process.env.DB_DATABASENAME,
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       migrations: [`${__dirname}/migration/*{.ts,.js}`],
-      migrationsRun: false,
+      migrationsRun: true,
       schema: process.env.SCHEMA ? process.env.SCHEMA : 'public',
-    })
-    ,AuthModule, UsersModule, UrlManagerModule
+    }),
+    AuthModule,
+    UsersModule,
+    UrlManagerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
