@@ -68,3 +68,7 @@ $ docker compose up -d
 
 
 ## Swagger
+https://url-shortener-pv.onrender.com/api
+
+## Live on Render
+https://url-shortener-pv.onrender.com/api/v1
