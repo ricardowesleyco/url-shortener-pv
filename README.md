@@ -24,7 +24,7 @@
 
 ## Descrição
 
-Encutador de URL Simples
+Encutador Simples de URL
 
 ## Setup do Projeto
 
