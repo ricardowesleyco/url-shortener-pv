@@ -1,7 +1,7 @@
 
 ## Descrição
 
-Encutador Simples de URL
+Encurtador Simples de URL
 
 ## Setup do Projeto
 
