@@ -35,13 +35,13 @@ export class UrlManagerService {
     try {
       const schema = await this.shortUrlRepository.create({
         origin: data.url,
-        short: `${APIURL}/${shortUrl}`,
+        short: shortUrl,
         userId: userId,
       });
 
       const entityResult = await this.shortUrlRepository.save(schema);
 
-      return { shortUrl: entityResult.short };
+      return { shortUrl: `${APIURL}/${entityResult.short}` };
     } catch (error) {
       const errorMessage = error.message || 'Try again later.';
       throw new ConflictException(errorMessage);
